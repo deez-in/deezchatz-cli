@@ -10,6 +10,22 @@ edition = "2024"
 color-eyre = "0.6.5"
 crossterm = "0.29.0"
 ratatui = "0.30.2"
+tokio = { version = "1.35", features = ["full"] }
+deezchatz-sdk-rust = { path = "../deezchatz-sdk" }
+rusqlite = { version = "0.31", features = ["bundled-sqlcipher"] }
+keyring = { version = "3", features = ["sync-secret-service"] }
+directories = "5"
+open = "5"
+tiny_http = "0.12"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1.6", features = ["v4"] }
+async-trait = "0.1"
+url = "2"
+rand = "0.8"
 
 # Read the optimization guideline for more details: https://ratatui.rs/recipes/apps/release-your-app/#optimizations
 [profile.release]
