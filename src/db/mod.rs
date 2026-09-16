@@ -1253,10 +1253,10 @@ mod tests {
     #[tokio::test]
     #[ignore]
     async fn test_inspect_user_db() {
-        let data_dir = std::path::PathBuf::from("/home/dezire/.local/share/deezchatz-cli");
-        let master_key = "5ac4c3ced4f7aabb17c1ea1321ee44093c9012ce8282cd9ad472a1ebdfc18049";
+        let data_dir = std::path::PathBuf::from(std::env::var("HOME").unwrap()).join(".local/share/deezchatz-cli");
+        let master_key = crate::keyring_store::KeyringManager::get_or_create_db_key().unwrap();
 
-        let storage = SqliteStorage::open(&data_dir, master_key).expect("open live db");
+        let storage = SqliteStorage::open(&data_dir, &master_key).expect("open live db");
 
         if let Ok(sess) = crate::keyring_store::KeyringManager::get_session() {
             println!("=== KEYRING SESSION: {:?} ===", sess);
