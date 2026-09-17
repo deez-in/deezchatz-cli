@@ -65,9 +65,7 @@ impl SqliteStorage {
             .map_err(|e| SdkError::Storage(format!("Failed to open primary DB: {}", e)))?;
 
         // Apply SQLCipher encryption key to primary database
-        println!("[DB DEBUG] Applying PRAGMA key (length: {} chars) to primary database...", master_encryption_key.len());
-        eprintln!("[DB DEBUG] Applying PRAGMA key (length: {} chars) to primary database...", master_encryption_key.len());
-        tracing::info!("[DB DEBUG] Applying PRAGMA key to primary database: {}", master_encryption_key);
+        tracing::info!("[DB] Applying encryption key (length: {} chars) to primary database", master_encryption_key.len());
 
         let pragma_key = format!("PRAGMA key = '{}';", master_encryption_key.replace('\'', "''"));
         conn.execute_batch(&pragma_key)
@@ -77,9 +75,8 @@ impl SqliteStorage {
         let _count: i64 = conn
             .query_row("SELECT count(*) FROM sqlite_master;", [], |row| row.get(0))
             .map_err(|e| {
-                let err_msg = format!("Key verification or corrupted primary DB: {} (Used key: {})", e, master_encryption_key);
-                eprintln!("[DB DEBUG] Primary database verification failed: {}", err_msg);
-                tracing::error!("[DB DEBUG] Primary database verification failed: {}", err_msg);
+                let err_msg = format!("Key verification or corrupted primary DB: {}", e);
+                tracing::error!("[DB] Primary database verification failed: {}", err_msg);
                 SdkError::Storage(err_msg)
             })?;
 

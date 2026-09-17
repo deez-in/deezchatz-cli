@@ -21,21 +21,15 @@ impl KeyringManager {
         let entry = Entry::new(SERVICE_NAME, DB_KEY_USER)
             .map_err(|e| format!("Failed to access keyring: {}", e))?;
 
-        println!("[KEYRING DEBUG] Querying OS keyring for existing password (service='{}', user='{}')...", SERVICE_NAME, DB_KEY_USER);
-        eprintln!("[KEYRING DEBUG] Querying OS keyring for existing password (service='{}', user='{}')...", SERVICE_NAME, DB_KEY_USER);
-        tracing::info!("[KEYRING DEBUG] Querying OS keyring for existing password (service='{}', user='{}')...", SERVICE_NAME, DB_KEY_USER);
+        tracing::info!("[KEYRING] Querying OS keyring for existing password (service='{}', user='{}')...", SERVICE_NAME, DB_KEY_USER);
 
         match entry.get_password() {
             Ok(key) if !key.is_empty() => {
-                println!("[KEYRING DEBUG] Successfully retrieved existing password from keyring: {}", key);
-                eprintln!("[KEYRING DEBUG] Successfully retrieved existing password from keyring: {}", key);
-                tracing::info!("[KEYRING DEBUG] Successfully retrieved existing password from keyring: {}", key);
+                tracing::info!("[KEYRING] Successfully retrieved existing password from keyring");
                 Ok(key)
             }
             err => {
-                println!("[KEYRING DEBUG] No existing key in keyring (status: {:?}). Generating new key...", err);
-                eprintln!("[KEYRING DEBUG] No existing key in keyring (status: {:?}). Generating new key...", err);
-                tracing::info!("[KEYRING DEBUG] No existing key in keyring (status: {:?}). Generating new key...", err);
+                tracing::info!("[KEYRING] No existing key in keyring (status: {:?}). Generating new key...", err);
 
                 // Generate a 32-byte (256-bit) random key
                 let mut rng = rand::thread_rng();
@@ -43,33 +37,25 @@ impl KeyringManager {
                 rng.fill(&mut random_bytes);
                 let new_key: String = random_bytes.iter().map(|b| format!("{:02x}", b)).collect();
 
-                println!("[KEYRING DEBUG] Generated password BEFORE storing to keyring: {}", new_key);
-                eprintln!("[KEYRING DEBUG] Generated password BEFORE storing to keyring: {}", new_key);
-                tracing::info!("[KEYRING DEBUG] Generated password BEFORE storing to keyring: {}", new_key);
+                tracing::info!("[KEYRING] Generated password BEFORE storing to keyring");
 
                 entry.set_password(&new_key)
                     .map_err(|e| {
                         let err_msg = format!("Failed to save encryption key to OS keyring: {}", e);
-                        eprintln!("[KEYRING DEBUG] Error: {}", err_msg);
-                        tracing::error!("[KEYRING DEBUG] Error: {}", err_msg);
+                        tracing::error!("[KEYRING] Error: {}", err_msg);
                         err_msg
                     })?;
 
-                println!("[KEYRING DEBUG] Password successfully saved to OS keyring. Now retrieving it to verify...");
-                eprintln!("[KEYRING DEBUG] Password successfully saved to OS keyring. Now retrieving it to verify...");
-                tracing::info!("[KEYRING DEBUG] Password successfully saved to OS keyring. Now retrieving it to verify...");
+                tracing::info!("[KEYRING] Password successfully saved to OS keyring. Now retrieving it to verify...");
 
                 let retrieved = entry.get_password()
                     .map_err(|e| {
                         let err_msg = format!("Failed to retrieve encryption key from OS keyring after storing: {}", e);
-                        eprintln!("[KEYRING DEBUG] Error: {}", err_msg);
-                        tracing::error!("[KEYRING DEBUG] Error: {}", err_msg);
+                        tracing::error!("[KEYRING] Error: {}", err_msg);
                         err_msg
                     })?;
 
-                println!("[KEYRING DEBUG] Retrieved password from OS keyring AFTER storing: {}", retrieved);
-                eprintln!("[KEYRING DEBUG] Retrieved password from OS keyring AFTER storing: {}", retrieved);
-                tracing::info!("[KEYRING DEBUG] Retrieved password from OS keyring AFTER storing: {}", retrieved);
+                tracing::info!("[KEYRING] Retrieved password from OS keyring AFTER storing");
 
                 Ok(retrieved)
             }
