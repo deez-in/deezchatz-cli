@@ -1,7 +1,11 @@
+pub mod app;
 pub mod chat;
 pub mod login;
+pub mod model;
+pub mod update;
 
-use crate::model::{FocusedPane, Model, Screen};
+pub use app::run;
+use model::{FocusedPane, Model, Screen};
 use ratatui::{
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},

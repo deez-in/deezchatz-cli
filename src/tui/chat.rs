@@ -1,4 +1,4 @@
-use crate::model::{FocusedPane, Model, Screen};
+use super::model::{FocusedPane, Model, Screen};
 use ratatui::{
     layout::{Alignment, Constraint, Direction, Layout, Position, Rect},
     style::{Color, Modifier, Style},

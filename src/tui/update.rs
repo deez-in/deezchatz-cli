@@ -1,4 +1,4 @@
-use crate::model::{Cmd, Model, Msg, Screen};
+use super::model::{Cmd, FocusedPane, Model, Msg, Screen};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use deezchatz_sdk_rust::Event as SdkEvent;
 
@@ -49,13 +49,13 @@ pub fn update(model: &mut Model, msg: Msg) -> Cmd {
                 chat_id,
                 display_name,
             };
-            model.focused_pane = crate::model::FocusedPane::Input;
+            model.focused_pane = FocusedPane::Input;
             model.input_buffer.clear();
             Cmd::None
         }
         Msg::BackToChats => {
             model.screen = Screen::ChatList;
-            model.focused_pane = crate::model::FocusedPane::Conversations;
+            model.focused_pane = FocusedPane::Conversations;
             model.reload_chats();
             Cmd::None
         }
@@ -66,7 +66,7 @@ pub fn update(model: &mut Model, msg: Msg) -> Cmd {
         }
         Msg::CancelNewChat => {
             model.screen = Screen::ChatList;
-            model.focused_pane = crate::model::FocusedPane::Conversations;
+            model.focused_pane = FocusedPane::Conversations;
             Cmd::None
         }
         Msg::SendMessage => {
