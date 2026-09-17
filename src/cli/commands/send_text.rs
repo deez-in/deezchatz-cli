@@ -50,7 +50,6 @@ pub async fn handle_send_text(
 
     println!("Message sent successfully. ID: {}", sent.message_id);
 
-
-
+    c.disconnect().await?;
     Ok(())
 }
