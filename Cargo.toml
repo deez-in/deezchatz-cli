@@ -26,6 +26,12 @@ uuid = { version = "1.6", features = ["v4"] }
 async-trait = "0.1"
 url = "2"
 rand = "0.8"
+chrono = "0.4"
+clap = { version = "4", features = ["derive"] }
+
+[build-dependencies]
+clap = { version = "4", features = ["derive"] }
+clap_mangen = "0.2"
 
 # Read the optimization guideline for more details: https://ratatui.rs/recipes/apps/release-your-app/#optimizations
 [profile.release]
