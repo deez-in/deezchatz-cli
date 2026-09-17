@@ -1,15 +1,15 @@
 mod auth;
-mod db;
-mod keyring_store;
+mod credentials;
 mod model;
 mod phone;
+mod storage;
+mod ui;
 mod update;
-mod view;
 
-use db::SqliteStorage;
+use credentials::{KeyringManager, StoredSession};
 use deezchatz_sdk_rust::{ClientConfig, DeezChatzClient};
-use keyring_store::{KeyringManager, StoredSession};
 use model::{Cmd, Model, Msg};
+use storage::SqliteStorage;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::{mpsc, Mutex};
@@ -124,7 +124,7 @@ async fn main() -> color_eyre::Result<()> {
 
     // Main Elm Architecture loop
     while !model.should_quit {
-        terminal.draw(|f| view::render(&model, f))?;
+        terminal.draw(|f| ui::render(&model, f))?;
 
         if let Some(msg) = rx.recv().await {
             let cmd = update::update(&mut model, msg);

@@ -1,5 +1,5 @@
-use crate::db::{ChatMessage, ChatSummary, SqliteStorage};
-use crate::keyring_store::StoredSession;
+use crate::credentials::StoredSession;
+use crate::storage::{ChatMessage, ChatSummary, SqliteStorage};
 use crossterm::event::KeyEvent;
 use deezchatz_sdk_rust::Event as SdkEvent;
 
