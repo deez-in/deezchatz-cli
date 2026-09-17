@@ -1,5 +1,5 @@
 use super::*;
-use deezchatz_sdk_rust::store::{InboxStore, KeyStore, SessionStore};
+use deezchatz_sdk_rust::messaging::{InboxStore, KeyStore, SessionStore};
 
 #[tokio::test]
 async fn test_sqlite_storage_traits_and_per_chat_databases() {

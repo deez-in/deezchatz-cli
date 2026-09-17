@@ -1,7 +1,7 @@
 use super::SqliteStorage;
 use async_trait::async_trait;
 use deezchatz_sdk_rust::error::SdkError;
-use deezchatz_sdk_rust::store::{
+use deezchatz_sdk_rust::messaging::{
     InboxEntry, InboxStore, KeyStore, MessageStatus, OutboxEntry, OutboxStore, SessionStore,
 };
 use rusqlite::{params, OptionalExtension};

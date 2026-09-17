@@ -1,4 +1,4 @@
-use deezchatz_sdk_rust::pkce;
+use deezchatz_sdk_rust::oauth as pkce;
 use std::time::Duration;
 use tiny_http::{Response, Server};
 use url::Url;
