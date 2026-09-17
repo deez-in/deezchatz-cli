@@ -26,22 +26,7 @@ pub async fn handle_send_text(
     };
 
     let mut c = client.lock().await;
-    let mut receiver = c.connect(&s.user_id, &s.device_id).await?;
-
-    println!("Connecting to broker...");
-    let timeout = tokio::time::Duration::from_secs(10);
-    let start = std::time::Instant::now();
-    loop {
-        if start.elapsed() > timeout {
-            color_eyre::eyre::bail!("Timeout waiting for broker connection");
-        }
-        match tokio::time::timeout(tokio::time::Duration::from_millis(100), receiver.recv()).await {
-            Ok(Some(deezchatz_sdk_rust::Event::Connected)) => break,
-            Ok(Some(_)) => continue,
-            Ok(None) => color_eyre::eyre::bail!("Broker channel closed"),
-            Err(_) => continue,
-        }
-    }
+    let _receiver = c.connect(&s.user_id, &s.device_id).await?;
 
     println!("Sending message...");
     let sent = c.send_text_message(&normalized_recipient, &text).await?;
@@ -65,8 +50,7 @@ pub async fn handle_send_text(
 
     println!("Message sent successfully. ID: {}", sent.message_id);
 
-    // Now that we are confirmed connected, a tiny sleep is enough for the background task to write to the socket.
-    tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+
 
     Ok(())
 }
